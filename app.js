@@ -285,7 +285,7 @@ function enviarWhatsApp() {
         mensaje += `\n*Observaciones:* ${obs}\n`;
     }
     
-    mensaje += `\n_Sección OS9 Araucanía | Raven 2026_`;
+    mensaje += `\n_Sección OS9 Araucanía 2026_`;
 
     const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
     window.open(url, "_blank");
@@ -563,4 +563,5 @@ function obtenerSerieDelAccesorio(valorAccesorio) {
 function actualizarCampoSerie() {
     // Esta función ya no necesita hacer nada visualmente
     // La serie se obtendrá automáticamente en enviarWhatsApp()
+
 }
