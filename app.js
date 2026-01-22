@@ -267,6 +267,8 @@ function enviarWhatsApp() {
     });
     
     mensaje += `\n*Equipo Radial:* ${document.getElementById("radio").value}\n`;
+    const tarjetaCombustible = document.getElementById("tarjeta-combustible").value;
+    mensaje += `*Tarjeta de Combustible:* ${tarjetaCombustible}\n`;
     if (accesoriosSelect === 'SI' && accesorioSelect) {
         mensaje += `*Accesorios:* ${accesorioSelect}`;
         if (serie) {
