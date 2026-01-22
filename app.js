@@ -65,7 +65,7 @@ async function cargarRadiales() {
         }
         const equipos = await response.json();
         const radialesDatalist = document.getElementById('radiales');
-        const accesoriosDatalist = document.getElementById('accesorios');
+        const accesoriosDatalist = document.getElementById('accesorios-list');
         const accesorioSelect = document.getElementById('accesorio-select');
         
         // Separar radiales y accesorios
@@ -508,7 +508,7 @@ function cargarAccesoriosDisponibles() {
     const accesorioSelect = document.getElementById('accesorio-select');
     accesorioSelect.innerHTML = '<option value="">Seleccionar accesorio...</option>';
     
-    const datalist = document.getElementById('accesorios');
+    const datalist = document.getElementById('accesorios-list');
     const opciones = datalist.querySelectorAll('option');
     
     opciones.forEach(option => {
@@ -526,7 +526,7 @@ function cargarAccesoriosDisponibles() {
  * Obtiene la serie del accesorio seleccionado
  */
 function obtenerSerieDelAccesorio(valorAccesorio) {
-    const datalist = document.getElementById('accesorios');
+    const datalist = document.getElementById('accesorios-list');
     const opciones = datalist.querySelectorAll('option');
     
     for (let option of opciones) {

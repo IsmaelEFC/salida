@@ -370,7 +370,7 @@
             <div class="form-group">
                 <label for="accesorios">Accesorios Adicionales</label>
                 <select id="accesorios" onchange="mostrarCampoSerie()">
-                    <option value="">NO</option>
+                    <option value="NO">NO</option>
                     <option value="SI">SI</option>
                 </select>
                 <div class="error-message" id="accesorios-error"></div>
@@ -386,8 +386,7 @@
             <div class="form-group">
                 <label for="equipamiento">Equipamiento completo <span class="required">*</span></label>
                 <select id="equipamiento" required onchange="mostrarCamposEquipamiento()">
-                    <option value="">Seleccionar...</option>
-                    <option value="No" selected>NO</option>
+                    <option value="No">NO</option>
                     <option value="Sí">Sí</option>
                 </select>
                 <div class="error-message" id="equipamiento-error"></div>
@@ -439,7 +438,7 @@
         <!-- cargado desde listado_equipamiento.json (solo tipo radial) -->
     </datalist>
 
-    <datalist id="accesorios">
+    <datalist id="accesorios-list">
         <!-- cargado desde listado_equipamiento.json (solo tipo accesorio) -->
     </datalist>
 
