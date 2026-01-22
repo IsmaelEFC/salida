@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Salidas</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#004080">
+    
+    <!-- PWA: Iconos -->
+    <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    
+    <!-- PWA: Apple -->
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+    <meta name="apple-mobile-web-app-title" content="Control de Salidas">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Tema Claro (por defecto) */
+        :root {
+            --bg-primary: linear-gradient(135deg, #e0e5ec 0%, #f8f9fa 100%);
+            --bg-secondary: linear-gradient(145deg, #f0f3fa, #d9dfe9);
+            --shadow-dark: #a3b1c6;
+            --shadow-light: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --border-color: #6c7aa6;
+            --input-shadow-inset: inset 4px 4px 8px #cbd5e0, inset -4px -4px 8px #ffffff;
+            --input-shadow-focus: inset 6px 6px 12px #a3b1c6, inset -6px -6px 12px #ffffff;
+            --shadow-elevation: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+            --shadow-button: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+        }
+        
+        /* Tema Oscuro */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: linear-gradient(135deg, #1a202c 0%, #0f1419 100%);
+                --bg-secondary: linear-gradient(145deg, #2d3748, #1a202c);
+                --shadow-dark: #0a0e27;
+                --shadow-light: #4a5568;
+                --text-primary: #e2e8f0;
+                --text-secondary: #a0aec0;
+                --border-color: #4a5568;
+                --input-shadow-inset: inset 4px 4px 8px #0a0e27, inset -4px -4px 8px #4a5568;
+                --input-shadow-focus: inset 6px 6px 12px #0a0e27, inset -6px -6px 12px #5a6f89;
+                --shadow-elevation: 9px 9px 16px #0a0e27, -9px -9px 16px #4a5568;
+                --shadow-button: 6px 6px 12px #0a0e27, -6px -6px 12px #4a5568;
+            }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg-primary);
+            border-radius: 30px;
+            box-shadow: var(--shadow-elevation);
+            padding: 40px;
+            position: relative;
+            overflow: visible;
+            border: none;
+            transition: all 0.4s ease;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--border-color), rgba(107, 120, 158, 0.7), var(--border-color));
+            border-radius: 30px 30px 0 0;
+            transition: background 0.4s ease;
+        }
+        
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 25px;
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow-elevation);
+            transition: transform 0.3s ease;
+            object-fit: cover;
+            padding: 8px;
+        }
+        
+        .logo-img:hover {
+            transform: translateY(-3px);
+            box-shadow: 12px 12px 20px var(--shadow-dark), -12px -12px 20px var(--shadow-light);
+        }
+        
+        .logo-text {
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            min-width: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            transition: color 0.4s ease;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 14px;
+            font-style: italic;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: color 0.4s ease;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+            background: var(--bg-secondary);
+            box-sizing: border-box;
+            box-shadow: var(--input-shadow-inset);
+            color: var(--text-primary);
+        }
+        
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 20px;
+        }
+        
+        option {
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            padding: 10px;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            option {
+                color: #2d3748;
+                background: #f0f3fa;
+            }
+            
+            select {
+                background-color: #f0f3fa;
+            }
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            option {
+                color: #e2e8f0;
+                background: #2d3748;
+            }
+            
+            select {
+                background-color: #2d3748;
+            }
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            background: var(--bg-secondary);
+            box-shadow: var(--input-shadow-focus);
+        }
+        
+        input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(145deg, var(--border-color), rgba(107, 120, 158, 0.8));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-button);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+        }
+        
+        button:active {
+            transform: translateY(0);
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+        
+        .required {
+            color: #e53e3e;
+        }
+        
+        .error {
+            background: linear-gradient(145deg, #fde2e2, #ffd1d1) !important;
+            box-shadow: inset 4px 4px 8px #f5a5a5, inset -4px -4px 8px #ffffff !important;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .error {
+                background: linear-gradient(145deg, #742a2a, #5a1f1f) !important;
+                box-shadow: inset 4px 4px 8px #3a0f0f, inset -4px -4px 8px #9a4a4a !important;
+            }
+        }
+        
+        .error-message {
+            color: #e53e3e;
+            font-size: 13px;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+        
+        .btn-agregar {
+            background: linear-gradient(145deg, #48bb78, #38a169);
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .btn-agregar:hover {
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+        }
+        
+        .btn-eliminar {
+            background: linear-gradient(145deg, #f56565, #e53e3e);
+            padding: 10px 14px;
+            font-size: 12px;
+            margin-left: 10px;
+            width: auto;
+            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+        }
+        
+        .btn-eliminar:hover {
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+        }
+        
+        .acompanante-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .acompanante-group input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="images/logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none';">
+        </div>
+        <h1>Control de Salidas</h1>
+        <p class="subtitle">Sección OS9 Araucanía</p>
+        <form id="salidaForm">
+            <div class="form-group">
+                <label for="fecha">Fecha <span class="required">*</span></label>
+                <input type="date" id="fecha" required>
+                <script>
+                    // Establecer fecha actual local
+                    const fecha = new Date();
+                    const año = fecha.getFullYear();
+                    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                    const día = String(fecha.getDate()).padStart(2, '0');
+                    document.getElementById('fecha').value = `${año}-${mes}-${día}`;
+                </script>
+                <div class="error-message" id="fecha-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="vehiculo">Vehículo <span class="required">*</span></label>
+                <select id="vehiculo" required>
+                    <option value="">Seleccionar vehículo...</option>
+                    
+                    <!-- hasta 10 vehículos -->
+                </select>
+                <div class="error-message" id="vehiculo-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="km">Odómetro</label>
+                <input type="number" id="km" min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="jp">Jefe de Patrulla <span class="required">*</span></label>
+                <input type="text" id="jp" list="funcionarios" required onchange="autocompletarArmamento('jp')">
+                <div class="error-message" id="jp-error"></div>
+                <input type="hidden" id="jp-armamento">
+                <input type="hidden" id="jp-casco">
+            </div>
+            
+            <div class="form-group">
+                <label for="acomp1">Acompañante 1 <span class="required">*</span></label>
+                <input type="text" id="acomp1" list="funcionarios" required onchange="autocompletarArmamento('acomp1')">
+                <div class="error-message" id="acomp1-error"></div>
+                <input type="hidden" id="acomp1-armamento">
+                <input type="hidden" id="acomp1-casco">
+            </div>
+            
+            <div id="acompanantes-adicionales">
+                <!-- Acompañantes adicionales se agregarán aquí dinámicamente -->
+            </div>
+            
+            <div class="form-group">
+                <button type="button" id="btn-agregar-acomp" onclick="agregarAcompanante()">+ Añadir Acompañante</button>
+            </div>
+
+            <div class="form-group">
+                <label for="radio">Equipo Radial <span class="required">*</span></label>
+                <input type="text" id="radio" list="radiales" required>
+                <div class="error-message" id="radio-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="accesorios">Accesorios Adicionales</label>
+                <select id="accesorios" onchange="mostrarCampoSerie()">
+                    <option value="">NO</option>
+                    <option value="SI">SI</option>
+                </select>
+                <div class="error-message" id="accesorios-error"></div>
+            </div>
+
+            <div class="form-group" id="grupo-accesorios" style="display: none;">
+                <label for="accesorio-select">Seleccionar Accesorio</label>
+                <select id="accesorio-select" onchange="actualizarCampoSerie()">
+                    <option value="">Seleccionar accesorio...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="equipamiento">Equipamiento completo <span class="required">*</span></label>
+                <select id="equipamiento" required onchange="mostrarCamposEquipamiento()">
+                    <option value="">Seleccionar...</option>
+                    <option value="No" selected>NO</option>
+                    <option value="Sí">Sí</option>
+                </select>
+                <div class="error-message" id="equipamiento-error"></div>
+            </div>
+
+            <div id="campos-equipamiento" style="display: none;">
+                <div id="equipamiento-completo" style="display: none;">
+                    <div class="form-group">
+                        <label for="chaleco-jp">Chaleco - Jefe de Patrulla</label>
+                        <input type="text" id="chaleco-jp" placeholder="Ej: CH-001">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="chaleco-acomp1">Chaleco - Acompañante 1</label>
+                        <input type="text" id="chaleco-acomp1" placeholder="Ej: CH-002">
+                    </div>
+                    
+                    <div id="chalecos-adicionales">
+                        <!-- Chalecos adicionales se agregarán aquí dinámicamente -->
+                    </div>
+                    
+                    <div class="form-group" style="display: none;">
+                        <label for="casco">Número de Casco</label>
+                        <input type="text" id="casco" placeholder="Ej: CS-001">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tipo">Tipo de servicio <span class="required">*</span></label>
+                <input type="text" id="tipo" list="tipos-servicio" required>
+                <div class="error-message" id="tipo-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="obs">Observaciones</label>
+                <textarea id="obs" rows="3" list="observaciones"></textarea>
+            </div>
+
+            <button type="button" onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+        </form>
+    </div>
+
+    <datalist id="funcionarios">
+        <!-- cargado desde listado_funcionarios.json -->
+    </datalist>
+
+    <datalist id="radiales">
+        <!-- cargado desde listado_equipamiento.json (solo tipo radial) -->
+    </datalist>
+
+    <datalist id="accesorios">
+        <!-- cargado desde listado_equipamiento.json (solo tipo accesorio) -->
+    </datalist>
+
+    <datalist id="tipos-servicio">
+        <!-- cargado desde localStorage -->
+    </datalist>
+
+    <datalist id="observaciones">
+        <!-- cargado desde localStorage -->
+    </datalist>
+
+    <script src="app.js"></script>
+</body>
+</html>

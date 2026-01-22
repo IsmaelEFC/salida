@@ -1,0 +1,158 @@
+[
+  {
+    "id": "0363",
+    "codigo": "0363",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0369",
+    "codigo": "0369",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0455",
+    "codigo": "0455",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0911",
+    "codigo": "0911",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0366",
+    "codigo": "0366",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0357",
+    "codigo": "0357",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0452",
+    "codigo": "0452",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0362",
+    "codigo": "0362",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0453",
+    "codigo": "0453",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0364",
+    "codigo": "0364",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0454",
+    "codigo": "0454",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0451",
+    "codigo": "0451",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0457",
+    "codigo": "0457",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0456",
+    "codigo": "0456",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0359",
+    "codigo": "0359",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0360",
+    "codigo": "0360",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "0367",
+    "codigo": "0367",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "4760",
+    "codigo": "4760",
+    "descripcion": "portátil",
+    "tipo": "radial"
+  },
+  {
+    "id": "4000135",
+    "codigo": "4000135",
+    "descripcion": "Binocular nocturno",
+    "tipo": "accesorio"
+  },
+  {
+    "id": "4000169",
+    "codigo": "4000169",
+    "descripcion": "Binocular nocturno",
+    "tipo": "accesorio"
+  },
+  {
+    "id": "4000355",
+    "codigo": "4000355",
+    "descripcion": "Binocular nocturno",
+    "tipo": "accesorio"
+  },
+  {
+    "id": "4000570",
+    "codigo": "4000570",
+    "descripcion": "Binocular nocturno",
+    "tipo": "accesorio"
+  },
+  {
+    "id": "5001002",
+    "codigo": "5001002",
+    "descripcion": "Binocular nocturno",
+    "tipo": "accesorio"
+  },
+  {
+    "id": "5001050",
+    "codigo": "5001050",
+    "descripcion": "Binocular nocturno",
+    "tipo": "accesorio"
+  },
+  {
+    "id": "1326",
+    "codigo": "1326",
+    "descripcion": "Cámara termal",
+    "tipo": "accesorio"
+  },
+  {
+    "id": "66292956",
+    "codigo": "66292956",
+    "descripcion": "Monocular termal",
+    "tipo": "accesorio"
+  }
+]

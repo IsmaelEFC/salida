@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "codigo": "VPC-316",
+    "PPU": "KRGK-52",
+    "color": "#6c7aa6"
+  },
+  {
+    "id": 2,
+    "codigo": "VPC-317",
+    "PPU": "KRGK-12",
+    "color": "#7c5d9e"
+  },
+  {
+    "id": 3,
+    "codigo": "AP-1533",
+    "PPU": "FHWD-20",
+    "color": "#5d7c9e"
+  },
+  {
+    "id": 4,
+    "codigo": "AP-2167",
+    "PPU": "JKKL-54",
+    "color": "#8b6f47"
+  },
+  {
+    "id": 5,
+    "codigo": "AP-2168",
+    "PPU": "JKKK-57",
+    "color": "#5d9e7c"
+  },
+  {
+    "id": 6,
+    "codigo": "VPC-1174",
+    "PPU": "THPW-15",
+    "color": "#9e5d7c"
+  },
+  {
+    "id": 7,
+    "codigo": "VPC-1843",
+    "PPU": "VPVT-71",
+    "color": "#6c8aa6"
+  },
+  {
+    "id": 8,
+    "codigo": "VPC-1844",
+    "PPU": "VPVT-62",
+    "color": "#a67c6c"
+  },
+  {
+    "id": 9,
+    "codigo": "VPC-1845",
+    "PPU": "VPVT-62",
+    "color": "#7ca67c"
+  },
+  {
+    "id": 10,
+    "codigo": "VPC-1846",
+    "PPU": "VPVT-62",
+    "color": "#6c7aa6"
+  }
+]

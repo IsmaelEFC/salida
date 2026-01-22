@@ -1,0 +1,240 @@
+[
+  {
+    "id": 1,
+    "nombre": "Huenul Carrasco",
+    "grado": "Teniente Coronel",
+    "armamento": "TBX11856",
+    "casco": "71947"
+  },
+  {
+    "id": 2,
+    "nombre": "Aliaga Montoya",
+    "grado": "Capitán",
+    "armamento": "TEZ06128",
+    "casco": "71705"
+  },
+  {
+    "id": 3,
+    "nombre": "Anguita Villablanca",
+    "grado": "Capitán",
+    "armamento": "TBX11854",
+    "casco": "71843"
+  },
+  {
+    "id": 4,
+    "nombre": "Muñoz Escobar",
+    "grado": "Teniente",
+    "armamento": "TBX11772",
+    "casco": "71945"
+  },
+  {
+    "id": 5,
+    "nombre": "Inostroza Vidal",
+    "grado": "Teniente",
+    "armamento": "TBX11849",
+    "casco": "71846"
+  },
+  {
+    "id": 6,
+    "nombre": "Andrades Gallegos",
+    "grado": "Suboficial Mayor",
+    "armamento": "TBX11851",
+    "casco": "71855"
+  },
+  {
+    "id": 7,
+    "nombre": "Alarcón Godoy",
+    "grado": "Suboficial Mayor",
+    "armamento": "TGX87372",
+    "casco": "71844"
+  },
+  {
+    "id": 8,
+    "nombre": "Lagos Acuña",
+    "grado": "Suboficial Mayor",
+    "armamento": "TBX11878",
+    "casco": "71848"
+  },
+  {
+    "id": 9,
+    "nombre": "Muñoz Gatica",
+    "grado": "Suboficial Mayor",
+    "armamento": "TBX11882",
+    "casco": "71860"
+  },
+  {
+    "id": 10,
+    "nombre": "Matus Merino",
+    "grado": "Suboficial Mayor",
+    "armamento": "TBX11855",
+    "casco": "71852"
+  },
+  {
+    "id": 11,
+    "nombre": "Aedo Franco",
+    "grado": "Suboficial",
+    "armamento": "TBX11852",
+    "casco": "71739"
+  },
+  {
+    "id": 12,
+    "nombre": "Barria Muñoz",
+    "grado": "Suboficial",
+    "armamento": "TBX11853",
+    "casco": "71849"
+  },
+  {
+    "id": 13,
+    "nombre": "Maechel Hechendorfer",
+    "grado": "Suboficial",
+    "armamento": "TBX11881",
+    "casco": "71861"
+  },
+  {
+    "id": 14,
+    "nombre": "Ruiz González",
+    "grado": "Suboficial",
+    "armamento": "TBX11848",
+    "casco": "71845"
+  },
+  {
+    "id": 15,
+    "nombre": "Albornoz Mendoza",
+    "grado": "Suboficial",
+    "armamento": "TBX11846",
+    "casco": "71859"
+  },
+  {
+    "id": 16,
+    "nombre": "Norambuena Norambuena",
+    "grado": "Suboficial",
+    "armamento": "TBX13106",
+    "casco": "71842"
+  },
+  {
+    "id": 17,
+    "nombre": "Ormazabal Marechal",
+    "grado": "Sgto. 1°",
+    "armamento": "TEZ06129",
+    "casco": "71847"
+  },
+  {
+    "id": 18,
+    "nombre": "Ojeda Álvarez",
+    "grado": "Sgto. 1°",
+    "armamento": "TAX83995",
+    "casco": "71966"
+  },
+  {
+    "id": 19,
+    "nombre": "Ñancucheo Hueralaf",
+    "grado": "Sgto. 1°",
+    "armamento": "TBX11862",
+    "casco": "71856"
+  },
+  {
+    "id": 20,
+    "nombre": "Ponce Saldaña",
+    "grado": "Sgto. 2°",
+    "armamento": "TBX11876",
+    "casco": "71704"
+  },
+  {
+    "id": 21,
+    "nombre": "Ocampo Saez",
+    "grado": "Sgto. 2°",
+    "armamento": "TIU63666",
+    "casco": "71841"
+  },
+  {
+    "id": 22,
+    "nombre": "Cea Gallegos",
+    "grado": "Sgto. 2°",
+    "armamento": "THY72789",
+    "casco": "71857"
+  },
+  {
+    "id": 23,
+    "nombre": "Yefih Martínez",
+    "grado": "Sgto. 2°",
+    "armamento": "TEZ06147",
+    "casco": "71940"
+  },
+  {
+    "id": 24,
+    "nombre": "Marifilo Rain",
+    "grado": "Sgto. 2°",
+    "armamento": "TBX11749",
+    "casco": "71850"
+  },
+  {
+    "id": 25,
+    "nombre": "Arias Pincheira",
+    "grado": "Sgto. 2°",
+    "armamento": "TGX87645",
+    "casco": "71700"
+  },
+  {
+    "id": 26,
+    "nombre": "Garrido Retamal",
+    "grado": "Sgto. 2°",
+    "armamento": "TBX11744",
+    "casco": "71858"
+  },
+  {
+    "id": 27,
+    "nombre": "Flores Contreras",
+    "grado": "Sgto. 2°",
+    "armamento": "TBX11877",
+    "casco": "71851"
+  },
+  {
+    "id": 28,
+    "nombre": "Muñoz Contreras",
+    "grado": "Cabo 1°",
+    "armamento": "TBX11874",
+    "casco": "71967"
+  },
+  {
+    "id": 29,
+    "nombre": "Jara Segura",
+    "grado": "Cabo 1°",
+    "armamento": "TGX87371",
+    "casco": "71702"
+  },
+  {
+    "id": 30,
+    "nombre": "Novoa Zambrano",
+    "grado": "Cabo 1°",
+    "armamento": "TBX11847",
+    "casco": "71740"
+  },
+  {
+    "id": 31,
+    "nombre": "Muñoz Palacios",
+    "grado": "Sgto. 2°",
+    "armamento": "TGX87363",
+    "casco": "71701"
+  },
+  {
+    "id": 32,
+    "nombre": "Venegas Venegas",
+    "grado": "Sgto. 1°",
+    "armamento": "TBX11872",
+    "casco": "71742"
+  },
+  {
+    "id": 33,
+    "nombre": "Tilleria Martinez",
+    "grado": "Cabo 1°",
+    "armamento": "TBX11871",
+    "casco": "71853"
+  },
+  {
+    "id": 34,
+    "nombre": "Ravanales Quiroz",
+    "grado": "Cabo 1°",
+    "armamento": "TBX12297",
+    "casco": "71703"
+  }
+]
