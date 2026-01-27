@@ -110,37 +110,37 @@
   {
     "id": "4000135",
     "codigo": "4000135",
-    "descripcion": "Binocular nocturno",
+    "descripcion": "Visor nocturno",
     "tipo": "accesorio"
   },
   {
     "id": "4000169",
     "codigo": "4000169",
-    "descripcion": "Binocular nocturno",
+    "descripcion": "Visor nocturno",
     "tipo": "accesorio"
   },
   {
     "id": "4000355",
     "codigo": "4000355",
-    "descripcion": "Binocular nocturno",
+    "descripcion": "Visor nocturno",
     "tipo": "accesorio"
   },
   {
     "id": "4000570",
     "codigo": "4000570",
-    "descripcion": "Binocular nocturno",
+    "descripcion": "Visor nocturno",
     "tipo": "accesorio"
   },
   {
     "id": "5001002",
     "codigo": "5001002",
-    "descripcion": "Binocular nocturno",
+    "descripcion": "Visor nocturno",
     "tipo": "accesorio"
   },
   {
     "id": "5001050",
     "codigo": "5001050",
-    "descripcion": "Binocular nocturno",
+    "descripcion": "Visor nocturno",
     "tipo": "accesorio"
   },
   {
@@ -156,3 +156,4 @@
     "tipo": "accesorio"
   }
 ]
+
