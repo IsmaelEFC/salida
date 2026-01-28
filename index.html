@@ -387,9 +387,13 @@
 
             <div class="form-group" id="grupo-accesorios" style="display: none;">
                 <label for="accesorio-select">Seleccionar Accesorio</label>
-                <select id="accesorio-select" onchange="actualizarCampoSerie()">
+                <select id="accesorio-select" onchange="mostrarCampoManualAccesorio()">
                     <option value="">Seleccionar accesorio...</option>
                 </select>
+                <div id="manual-accesorio-group" class="form-group" style="display: none;">
+                    <label for="manual-accesorio">Ingresar Accesorio Manual</label>
+                    <input type="text" id="manual-accesorio" placeholder="Nombre del accesorio">
+                </div>
             </div>
 
             <div class="form-group">

@@ -21,8 +21,9 @@ async function cargarVehiculos() {
         
         vehiculos.forEach(vehiculo => {
             const option = document.createElement('option');
-            option.value = vehiculo.codigo;
-            option.textContent = `${vehiculo.codigo} - ${vehiculo.PPU}`;
+            const valorCompleto = `${vehiculo.codigo} - ${vehiculo.PPU}`;
+            option.value = valorCompleto;
+            option.textContent = valorCompleto;
             select.appendChild(option);
         });
     } catch (error) {
@@ -173,72 +174,87 @@ function validarFormulario() {
 }
 
 function enviarWhatsApp() {
+    console.log('Iniciando enviarWhatsApp...');
+    
     if (!validarFormulario()) {
+        console.log('Validación falló');
         return;
     }
     
-    const fecha = document.getElementById("fecha").value;
+    console.log('Validación exitosa');
+    
+    const fechaInput = document.getElementById("fecha").value;
+    // Formatear la fecha a dd-mm-aaaa para el mensaje de WhatsApp
+    const [año, mes, dia] = fechaInput.split('-');
+    const fechaFormateadaWhatsApp = `${dia}-${mes}-${año}`;
+
+    // Obtener valores de los campos
     const vehiculo = document.getElementById("vehiculo").value;
     const km = document.getElementById("km").value;
+    const tarjetaCombustible = document.getElementById("tarjeta-combustible").value;
     const jp = document.getElementById("jp").value;
     const jpArmamento = document.getElementById("jp-armamento").value;
     const jpCasco = document.getElementById("jp-casco").value;
     const jpChaleco = document.getElementById("chaleco-jp").value;
-    const acomp1 = document.getElementById("acomp1").value;
-    const acomp1Armamento = document.getElementById("acomp1-armamento").value;
-    const acomp1Casco = document.getElementById("acomp1-casco").value;
-    const acomp1Chaleco = document.getElementById("chaleco-acomp1").value;
     const equipamiento = document.getElementById("equipamiento").value;
     const tipo = document.getElementById("tipo").value;
     const obs = document.getElementById("obs").value;
-    const accesoriosSelect = document.getElementById("accesorios").value;
-    const accesorioSelect = document.getElementById("accesorio-select").value;
-    // Obtener la serie automáticamente del accesorio seleccionado
-    const serie = accesorioSelect ? obtenerSerieDelAccesorio(accesorioSelect) : '';
-
-    // Guardar tipo de servicio y observaciones en localStorage
-    guardarTipoServicio(tipo);
-    if (obs.trim()) {
-        guardarObservacion(obs.trim());
-    }
-
-    // Obtener todos los acompañantes adicionales y sus armamentos, cascos y chalecos
-    const acompanantes = [{
-        nombre: acomp1, 
-        armamento: acomp1Armamento, 
-        casco: acomp1Casco,
-        chaleco: acomp1Chaleco
-    }];
-    const inputsAdicionales = document.querySelectorAll('#acompanantes-adicionales .acompanante-group');
-    inputsAdicionales.forEach((grupo, index) => {
-        const nombreInput = grupo.querySelector(`input[type="text"]`);
+    
+    console.log('Datos obtenidos:', { vehiculo, jp, tipo });
+    
+    // Obtener acompañantes
+    const acompanantes = [];
+    for (let i = 1; i <= contadorAcompanantes; i++) {
+        const nombre = document.getElementById(`acomp${i}`).value;
+        const armamento = document.getElementById(`acomp${i}-armamento`).value;
+        const casco = document.getElementById(`acomp${i}-casco`).value;
+        const chaleco = document.getElementById(`chaleco-acomp${i}`).value;
         
-        if (nombreInput && nombreInput.value.trim()) {
-            const inputId = nombreInput.id; // Ej: acomp2, acomp3, etc.
-            const numero = inputId.replace('acomp', '');
-            const armamentoInput = document.getElementById(`${inputId}-armamento`);
-            const cascoInput = document.getElementById(`${inputId}-casco`);
-            const chalecoInput = document.getElementById(`chaleco-${inputId}`); // chaleco-acomp2, chaleco-acomp3, etc.
-            
-            acompanantes.push({
-                nombre: nombreInput.value.trim(),
-                armamento: armamentoInput ? armamentoInput.value : '',
-                casco: cascoInput ? cascoInput.value : '',
-                chaleco: chalecoInput ? chalecoInput.value : ''
-            });
+        if (nombre) {
+            acompanantes.push({ nombre, armamento, casco, chaleco });
         }
-    });
+    }
+    
+    // Obtener radial y accesorios
+    const radio = document.getElementById("radio").value;
+    const accesoriosSelect = document.getElementById("accesorios").value;
+    const accesorioSeleccionadoValue = document.getElementById("accesorio-select").value;
+    const manualAccesorioValue = document.getElementById('manual-accesorio').value.trim();
 
+    let accesorioFinal = '';
+    let serie = '';
+
+    if (accesorioSeleccionadoValue === 'MANUAL') {
+        accesorioFinal = manualAccesorioValue;
+    } else if (accesorioSeleccionadoValue) {
+        accesorioFinal = accesorioSeleccionadoValue;
+        serie = obtenerSerieDelAccesorio(accesorioSeleccionadoValue);
+    }
+    
     // Construir mensaje mejorado
     let mensaje = `*SALIDA OS9*\n\n`;
-    mensaje += `*Fecha:* ${fecha}\n`;
-    mensaje += `*Vehículo:* ${vehiculo}\n`;
+    mensaje += `*Fecha:* ${fechaFormateadaWhatsApp}\n`;
+    const vehiculoCompleto = document.getElementById("vehiculo").value;
+    
+    // Manejo seguro del vehículo para evitar undefined
+    let vehiculoCodigo = vehiculoCompleto;
+    let vehiculoPatente = '';
+    
+    if (vehiculoCompleto && vehiculoCompleto.includes(' - ')) {
+        const partes = vehiculoCompleto.split(' - ');
+        vehiculoCodigo = partes[0] || vehiculoCompleto;
+        vehiculoPatente = partes[1] || '';
+    }
+    
+    mensaje += `*Vehículo:* ${vehiculoCodigo}\n`;
+    if (vehiculoPatente) {
+        mensaje += `*Patente:* ${vehiculoPatente}\n`;
+    }
     
     if (km) {
         mensaje += `*Kilómetros:* ${km}\n`;
     }
     
-    const tarjetaCombustible = document.getElementById("tarjeta-combustible").value;
     mensaje += `*Tarjeta de Combustible:* ${tarjetaCombustible}\n`;
     
     mensaje += `\n*Personal:*\n`;
@@ -269,9 +285,9 @@ function enviarWhatsApp() {
         mensaje += `\n`;
     });
     
-    mensaje += `\n*Equipo Radial:* ${document.getElementById("radio").value}\n`;
-    if (accesoriosSelect === 'SI' && accesorioSelect) {
-        mensaje += `*Accesorios:* ${accesorioSelect}`;
+    mensaje += `\n*Equipo Radial:* ${radio}\n`;
+    if (accesoriosSelect === 'SI' && accesorioSeleccionadoValue) {
+        mensaje += `*Accesorios:* ${accesorioFinal}`;
         if (serie) {
             mensaje += ` - Serie: ${serie}`;
         }
@@ -523,6 +539,12 @@ function cargarAccesoriosDisponibles() {
             accesorioSelect.appendChild(optionSelect);
         }
     });
+
+    // Añadir opción para ingreso manual
+    const manualOption = document.createElement('option');
+    manualOption.value = 'MANUAL';
+    manualOption.textContent = 'Otro (Ingreso manual)';
+    accesorioSelect.appendChild(manualOption);
 }
 
 /**
@@ -558,10 +580,16 @@ function obtenerSerieDelAccesorio(valorAccesorio) {
 }
 
 /**
- * Función simplificada para actualizar cuando se selecciona un accesorio específico
+ * Función para mostrar/ocultar el campo de ingreso manual de accesorio
  */
-function actualizarCampoSerie() {
-    // Esta función ya no necesita hacer nada visualmente
-    // La serie se obtendrá automáticamente en enviarWhatsApp()
+function mostrarCampoManualAccesorio() {
+    const accesorioSelect = document.getElementById('accesorio-select');
+    const manualAccesorioGroup = document.getElementById('manual-accesorio-group');
 
+    if (accesorioSelect.value === 'MANUAL') {
+        manualAccesorioGroup.style.display = 'block';
+    } else {
+        manualAccesorioGroup.style.display = 'none';
+        document.getElementById('manual-accesorio').value = ''; // Limpiar campo manual
+    }
 }
