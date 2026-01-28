@@ -84,7 +84,7 @@
             right: 0;
             height: 4px;
             background: linear-gradient(90deg, var(--border-color), rgba(107, 120, 158, 0.7), var(--border-color));
-            border-radius: 30px 30px 0 0;
+            border-radius: 10px 10px 0 0;
             transition: background 0.4s ease;
         }
         
@@ -93,18 +93,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .logo-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 25px;
-            background: var(--bg-secondary);
-            box-shadow: var(--shadow-elevation);
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
             transition: transform 0.3s ease;
             object-fit: cover;
-            padding: 8px;
+            padding: 0;
+            background: transparent;
         }
         
         .logo-img:hover {
@@ -303,7 +303,7 @@
 <body>
     <div class="container">
         <div class="logo-container">
-            <img src="images/logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none';">
+            <img src="images/logo2.png" alt="Logo" class="logo-img" onerror="this.style.display='none';">
         </div>
         <h1>Control de Salidas</h1>
         <p class="subtitle">Sección OS9 Araucanía</p>
@@ -371,8 +371,8 @@
             </div>
 
             <div class="form-group">
-                <label for="radio">Equipo Radial <span class="required">*</span></label>
-                <input type="text" id="radio" list="radiales" required>
+                <label for="radio">Equipo Radial</label>
+                <input type="text" id="radio" list="radiales">
                 <div class="error-message" id="radio-error"></div>
             </div>
 
@@ -397,8 +397,8 @@
             </div>
 
             <div class="form-group">
-                <label for="equipamiento">Equipamiento completo <span class="required">*</span></label>
-                <select id="equipamiento" required onchange="mostrarCamposEquipamiento()">
+                <label for="equipamiento">Equipamiento completo</label>
+                <select id="equipamiento" onchange="mostrarCamposEquipamiento()">
                     <option value="No">NO</option>
                     <option value="Sí">Sí</option>
                 </select>

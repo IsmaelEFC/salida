@@ -146,7 +146,7 @@ function eliminarAcompanante(boton) {
 
 function validarFormulario() {
     let isValid = true;
-    const campos = ['fecha', 'vehiculo', 'jp', 'acomp1', 'radio', 'equipamiento', 'tipo'];
+    const campos = ['fecha', 'vehiculo', 'jp', 'acomp1', 'tipo'];
     
     // Limpiar errores anteriores
     campos.forEach(campo => {
@@ -285,7 +285,12 @@ function enviarWhatsApp() {
         mensaje += `\n`;
     });
     
-    mensaje += `\n*Equipo Radial:* ${radio}\n`;
+    // Solo incluir equipo radial si tiene valor
+    if (radio) {
+        mensaje += `\n*Equipo Radial:* ${radio}\n`;
+    }
+    
+    // Solo incluir accesorios si se seleccionó "SI" y hay accesorio
     if (accesoriosSelect === 'SI' && accesorioSeleccionadoValue) {
         mensaje += `*Accesorios:* ${accesorioFinal}`;
         if (serie) {
@@ -293,7 +298,11 @@ function enviarWhatsApp() {
         }
         mensaje += `\n`;
     }
-    mensaje += `*Equipamiento completo:* ${equipamiento}\n`;
+    
+    // Solo incluir equipamiento si tiene valor
+    if (equipamiento) {
+        mensaje += `*Equipamiento completo:* ${equipamiento}\n`;
+    }
     
     mensaje += `*Tipo de Servicio:* ${tipo}\n`;
     
