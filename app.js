@@ -281,7 +281,7 @@ function enviarWhatsApp() {
     }
     
     if (km) {
-        mensaje += `*Kilómetros:* ${km}\n`;
+        mensaje += `*Kilometraje:* ${km}\n`;
     }
     
     mensaje += `*Tarjeta de Combustible:* ${tarjetaCombustible}\n`;
@@ -635,4 +635,5 @@ function mostrarCampoManualAccesorio() {
         manualAccesorioGroup.style.display = 'none';
         document.getElementById('manual-accesorio').value = ''; // Limpiar campo manual
     }
+
 }
