@@ -114,7 +114,7 @@ function agregarAcompanante() {
         <label for="acomp${contadorAcompanantes}">Acompañante ${contadorAcompanantes}</label>
         <div class="acompanante-group">
             <div style="flex: 1;">
-                <input type="text" id="acomp${contadorAcompanantes}" list="funcionarios" placeholder="Acompañante ${contadorAcompanantes}" onchange="autocompletarArmamento('acomp${contadorAcompanantes}')">
+                <input type="text" id="acomp${contadorAcompanantes}" list="funcionarios" placeholder="Acompañante ${contadorAcompanantes}" onchange="autocompletarArmamento('acomp${contadorAcompanantes}')" onfocus="this.select()" onclick="this.select()">
                 <input type="hidden" id="acomp${contadorAcompanantes}-armamento">
                 <input type="hidden" id="acomp${contadorAcompanantes}-casco">
             </div>
@@ -175,6 +175,26 @@ function validarFormulario() {
 
 function enviarWhatsApp() {
     console.log('Iniciando enviarWhatsApp...');
+    console.log('Función enviarWhatsApp llamada correctamente');
+    
+    // Verificar que los elementos necesarios existan
+    const elementosRequeridos = ['fecha', 'vehiculo', 'jp', 'acomp1', 'tipo'];
+    const elementosFaltantes = [];
+    
+    elementosRequeridos.forEach(id => {
+        const elemento = document.getElementById(id);
+        if (!elemento) {
+            elementosFaltantes.push(id);
+        } else {
+            console.log(`Elemento ${id} encontrado, valor: "${elemento.value}"`);
+        }
+    });
+    
+    if (elementosFaltantes.length > 0) {
+        console.error('Elementos faltantes:', elementosFaltantes);
+        alert('Error: Faltan elementos necesarios en el formulario. Por favor, recarga la página.');
+        return;
+    }
     
     if (!validarFormulario()) {
         console.log('Validación falló');
@@ -184,6 +204,8 @@ function enviarWhatsApp() {
     console.log('Validación exitosa');
     
     const fechaInput = document.getElementById("fecha").value;
+    console.log('Fecha:', fechaInput);
+    
     // Formatear la fecha a dd-mm-aaaa para el mensaje de WhatsApp
     const [año, mes, dia] = fechaInput.split('-');
     const fechaFormateadaWhatsApp = `${dia}-${mes}-${año}`;
@@ -201,16 +223,23 @@ function enviarWhatsApp() {
     const obs = document.getElementById("obs").value;
     
     console.log('Datos obtenidos:', { vehiculo, jp, tipo });
+    console.log('Todos los campos:', { fechaInput, vehiculo, km, tarjetaCombustible, jp, equipamiento, tipo, obs });
     
     // Obtener acompañantes
     const acompanantes = [];
     for (let i = 1; i <= contadorAcompanantes; i++) {
-        const nombre = document.getElementById(`acomp${i}`).value;
-        const armamento = document.getElementById(`acomp${i}-armamento`).value;
-        const casco = document.getElementById(`acomp${i}-casco`).value;
-        const chaleco = document.getElementById(`chaleco-acomp${i}`).value;
+        const nombreElement = document.getElementById(`acomp${i}`);
+        const armamentoElement = document.getElementById(`acomp${i}-armamento`);
+        const cascoElement = document.getElementById(`acomp${i}-casco`);
+        const chalecoElement = document.getElementById(`chaleco-acomp${i}`);
         
-        if (nombre) {
+        // Verificar que el elemento de nombre exista antes de intentar acceder a su valor
+        if (nombreElement && nombreElement.value) {
+            const nombre = nombreElement.value;
+            const armamento = armamentoElement ? armamentoElement.value : '';
+            const casco = cascoElement ? cascoElement.value : '';
+            const chaleco = chalecoElement ? chalecoElement.value : '';
+            
             acompanantes.push({ nombre, armamento, casco, chaleco });
         }
     }
@@ -312,8 +341,13 @@ function enviarWhatsApp() {
     
     mensaje += `\n_Sección OS9 Araucanía 2026_`;
 
+    console.log('Mensaje construido:', mensaje);
+    console.log('URL que se abrirá:', `https://wa.me/?text=${encodeURIComponent(mensaje)}`);
+
     const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+    console.log('Abriendo WhatsApp...');
     window.open(url, "_blank");
+    console.log('WhatsApp abierto');
 }
 
 // Funciones para manejar tipos de servicio y observaciones

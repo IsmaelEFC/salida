@@ -50,14 +50,13 @@
   {
     "id": 9,
     "codigo": "VPC-1845",
-    "PPU": "VPVT-88",
+    "PPU": "VPVT-62",
     "color": "#7ca67c"
   },
   {
     "id": 10,
-    "codigo": "VPC-1161",
-    "PPU": "THVW-98",
+    "codigo": "VPC-1846",
+    "PPU": "VPVT-62",
     "color": "#6c7aa6"
   }
-
 ]

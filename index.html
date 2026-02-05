@@ -348,7 +348,7 @@
 
             <div class="form-group">
                 <label for="jp">Jefe de Patrulla <span class="required">*</span></label>
-                <input type="text" id="jp" list="funcionarios" required onchange="autocompletarArmamento('jp')">
+                <input type="text" id="jp" list="funcionarios" required onchange="autocompletarArmamento('jp')" onfocus="this.select()" onclick="this.select()">
                 <div class="error-message" id="jp-error"></div>
                 <input type="hidden" id="jp-armamento">
                 <input type="hidden" id="jp-casco">
@@ -356,7 +356,7 @@
             
             <div class="form-group">
                 <label for="acomp1">Acompañante 1 <span class="required">*</span></label>
-                <input type="text" id="acomp1" list="funcionarios" required onchange="autocompletarArmamento('acomp1')">
+                <input type="text" id="acomp1" list="funcionarios" required onchange="autocompletarArmamento('acomp1')" onfocus="this.select()" onclick="this.select()">
                 <div class="error-message" id="acomp1-error"></div>
                 <input type="hidden" id="acomp1-armamento">
                 <input type="hidden" id="acomp1-casco">
