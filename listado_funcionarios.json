@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "nombre": "Freddy Huenul Carrasco",
+    "nombre": "Sebastián Leiva Cabrera",
     "grado": "Teniente Coronel",
     "armamento": "TBX11856",
     "casco": "71947"
@@ -237,4 +237,5 @@
     "armamento": "TBX12297",
     "casco": "71703"
   }
+
 ]
