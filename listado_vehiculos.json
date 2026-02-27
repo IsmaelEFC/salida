@@ -58,5 +58,11 @@
     "codigo": "VPC-1846",
     "PPU": "VPVT-62",
     "color": "#6c7aa6"
+  },
+  {
+    "id": 11,
+    "codigo": "VPC-1161",
+    "PPU": "THVW-98",
+    "color": "#6c7aa6"
   }
 ]
