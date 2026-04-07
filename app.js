@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarTiposServicio();
     cargarObservaciones();
     setFechaActual();
+    
+    // Enfocar el primer campo relevante
+    setTimeout(() => {
+        document.getElementById('fecha').focus();
+    }, 500);
 });
 
 let contadorAcompanantes = 1;
@@ -26,6 +31,12 @@ async function cargarVehiculos() {
             option.textContent = valorCompleto;
             select.appendChild(option);
         });
+
+        // Agregar opción para ingreso manual
+        const manualOption = document.createElement('option');
+        manualOption.value = 'MANUAL';
+        manualOption.textContent = 'OTRO (Ingreso manual)';
+        select.appendChild(manualOption);
     } catch (error) {
         console.error('Error al cargar vehículos:', error);
         // Fallback: agregar un vehículo de prueba
@@ -104,6 +115,63 @@ function setFechaActual() {
     fechaInput.value = fechaFormateada;
 }
 
+function mostrarCampoManualVehiculo() {
+    const vehiculoSelect = document.getElementById('vehiculo');
+    const manualVehiculoGroup = document.getElementById('manual-vehiculo-group');
+
+    if (vehiculoSelect.value === 'MANUAL') {
+        manualVehiculoGroup.classList.remove('hidden');
+    } else {
+        manualVehiculoGroup.classList.add('hidden');
+        document.getElementById('manual-vehiculo').value = '';
+    }
+}
+
+function setToggle(id, value) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    
+    input.value = value;
+    
+    // Actualizar UI de los botones
+    const group = input.nextElementSibling;
+    if (group && group.classList.contains('toggle-group')) {
+        const buttons = group.querySelectorAll('.toggle-btn');
+        buttons.forEach(btn => {
+            if (btn.innerText.includes(value === 'Sí' || value === 'SI' ? 'SI' : (value === 'Infan' || value === 'INFANTERIA' ? 'Infan' : (value === 'Moto' || value === 'MOTORIZADO' ? 'Moto' : 'NO')))) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    // Disparar eventos manuales si es necesario
+    if (id === 'desplazamiento') toggleVehiculo();
+    if (id === 'accesorios') mostrarCampoSerie();
+    if (id === 'equipamiento') mostrarCamposEquipamiento();
+}
+
+function toggleVehiculo() {
+    const desplazamiento = document.getElementById('desplazamiento').value;
+    const sectionVehiculo = document.getElementById('section-vehiculo');
+    const vehiculoSelect = document.getElementById('vehiculo');
+    
+    if (desplazamiento === 'INFANTERIA') {
+        sectionVehiculo.classList.add('hidden');
+        if (vehiculoSelect) {
+            vehiculoSelect.removeAttribute('required');
+            vehiculoSelect.value = '';
+            mostrarCampoManualVehiculo(); // Ocultar campo manual
+        }
+    } else {
+        sectionVehiculo.classList.remove('hidden');
+        if (vehiculoSelect) {
+            vehiculoSelect.setAttribute('required', 'required');
+        }
+    }
+}
+
 function agregarAcompanante() {
     contadorAcompanantes++;
     const container = document.getElementById('acompanantes-adicionales');
@@ -112,19 +180,22 @@ function agregarAcompanante() {
     div.className = 'form-group';
     div.innerHTML = `
         <label for="acomp${contadorAcompanantes}">Acompañante ${contadorAcompanantes}</label>
-        <div class="acompanante-group">
-            <div style="flex: 1;">
-                <input type="text" id="acomp${contadorAcompanantes}" list="funcionarios" placeholder="Acompañante ${contadorAcompanantes}" onchange="autocompletarArmamento('acomp${contadorAcompanantes}')" onfocus="this.select()" onclick="this.select()">
-                <input type="hidden" id="acomp${contadorAcompanantes}-armamento">
-                <input type="hidden" id="acomp${contadorAcompanantes}-casco">
+        <div style="display: flex; gap: 8px; flex-direction: column;">
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <div class="input-icon-wrapper" style="flex: 1;">
+                    <span class="icon-placeholder">🕵️</span>
+                    <input type="text" id="acomp${contadorAcompanantes}" list="funcionarios" placeholder="Grado y Nombre" onchange="autocompletarArmamento('acomp${contadorAcompanantes}')" onfocus="this.select()">
+                </div>
+                <button type="button" class="btn-danger" onclick="eliminarAcompanante(this)" style="padding: 12px; width: 45px;">✕</button>
             </div>
-            <button type="button" class="btn-eliminar" onclick="eliminarAcompanante(this)">✕</button>
+            <div id="acomp${contadorAcompanantes}-info" class="badge-info hidden"></div>
+            <input type="hidden" id="acomp${contadorAcompanantes}-armamento">
+            <input type="hidden" id="acomp${contadorAcompanantes}-casco">
         </div>
     `;
     
     container.appendChild(div);
     
-    // Agregar campo de chaleco si el equipamiento está en "Sí"
     if (document.getElementById('equipamiento').value === 'Sí') {
         agregarCampoChalecoAdicional(contadorAcompanantes);
     }
@@ -134,7 +205,6 @@ function eliminarAcompanante(boton) {
     const grupo = boton.closest('.form-group');
     const inputId = grupo.querySelector('input[type="text"]').id;
     
-    // Eliminar el campo de chaleco asociado si existe
     const campoChalecoId = `chaleco-${inputId}`;
     const campoChaleco = document.getElementById(campoChalecoId);
     if (campoChaleco) {
@@ -146,74 +216,54 @@ function eliminarAcompanante(boton) {
 
 function validarFormulario() {
     let isValid = true;
-    const campos = ['fecha', 'vehiculo', 'jp', 'acomp1', 'tipo'];
+    const desplazamiento = document.getElementById('desplazamiento').value;
+    const campos = ['fecha', 'jp', 'acomp1', 'tipo'];
     
-    // Limpiar errores anteriores
+    document.querySelectorAll('input, select, textarea').forEach(el => el.style.borderColor = '');
+    
     campos.forEach(campo => {
         const input = document.getElementById(campo);
-        const errorDiv = document.getElementById(`${campo}-error`);
-        if (input) {
-            input.classList.remove('error');
-            if (errorDiv) errorDiv.textContent = '';
-        }
-    });
-    
-    // Validar cada campo
-    campos.forEach(campo => {
-        const input = document.getElementById(campo);
-        const errorDiv = document.getElementById(`${campo}-error`);
-        
         if (input && !input.value.trim()) {
-            input.classList.add('error');
-            if (errorDiv) errorDiv.textContent = 'Este campo es obligatorio';
+            input.style.borderColor = '#ef4444';
             isValid = false;
         }
     });
+
+    if (desplazamiento === 'MOTORIZADO') {
+        const vehiculoSelect = document.getElementById('vehiculo');
+        if (vehiculoSelect && !vehiculoSelect.value.trim()) {
+            vehiculoSelect.style.borderColor = '#ef4444';
+            isValid = false;
+        } else if (vehiculoSelect && vehiculoSelect.value === 'MANUAL') {
+            const manualVehiculo = document.getElementById('manual-vehiculo');
+            if (manualVehiculo && !manualVehiculo.value.trim()) {
+                manualVehiculo.style.borderColor = '#ef4444';
+                isValid = false;
+            }
+        }
+
+        const kmInput = document.getElementById('km');
+        if (kmInput && !String(kmInput.value).trim()) {
+            kmInput.style.borderColor = '#ef4444';
+            isValid = false;
+        }
+    }
+    
+    if (!isValid) {
+        alert('Por favor, complete los campos obligatorios marcados en rojo.');
+    }
     
     return isValid;
 }
 
 function enviarWhatsApp() {
-    console.log('Iniciando enviarWhatsApp...');
-    console.log('Función enviarWhatsApp llamada correctamente');
-    
-    // Verificar que los elementos necesarios existan
-    const elementosRequeridos = ['fecha', 'vehiculo', 'jp', 'acomp1', 'tipo'];
-    const elementosFaltantes = [];
-    
-    elementosRequeridos.forEach(id => {
-        const elemento = document.getElementById(id);
-        if (!elemento) {
-            elementosFaltantes.push(id);
-        } else {
-            console.log(`Elemento ${id} encontrado, valor: "${elemento.value}"`);
-        }
-    });
-    
-    if (elementosFaltantes.length > 0) {
-        console.error('Elementos faltantes:', elementosFaltantes);
-        alert('Error: Faltan elementos necesarios en el formulario. Por favor, recarga la página.');
-        return;
-    }
-    
-    if (!validarFormulario()) {
-        console.log('Validación falló');
-        return;
-    }
-    
-    console.log('Validación exitosa');
+    if (!validarFormulario()) return;
     
     const fechaInput = document.getElementById("fecha").value;
-    console.log('Fecha:', fechaInput);
-    
-    // Formatear la fecha a dd-mm-aaaa para el mensaje de WhatsApp
     const [año, mes, dia] = fechaInput.split('-');
-    const fechaFormateadaWhatsApp = `${dia}-${mes}-${año}`;
+    const fechaFormateada = `${dia}-${mes}-${año}`;
 
-    // Obtener valores de los campos
-    const vehiculo = document.getElementById("vehiculo").value;
-    const km = document.getElementById("km").value;
-    const tarjetaCombustible = document.getElementById("tarjeta-combustible").value;
+    const desplazamiento = document.getElementById("desplazamiento").value;
     const jp = document.getElementById("jp").value;
     const jpArmamento = document.getElementById("jp-armamento").value;
     const jpCasco = document.getElementById("jp-casco").value;
@@ -222,132 +272,83 @@ function enviarWhatsApp() {
     const tipo = document.getElementById("tipo").value;
     const obs = document.getElementById("obs").value;
     
-    console.log('Datos obtenidos:', { vehiculo, jp, tipo });
-    console.log('Todos los campos:', { fechaInput, vehiculo, km, tarjetaCombustible, jp, equipamiento, tipo, obs });
+    let mensaje = `*SALIDA OS9*\n`;
+    mensaje += `\n`;
+    mensaje += `*Fecha:* ${fechaFormateada}\n`;
+    if (desplazamiento === 'INFANTERIA') {
+        mensaje += `*Modo:* INFANTERÍA\n`;
+    }
     
-    // Obtener acompañantes
-    const acompanantes = [];
-    for (let i = 1; i <= contadorAcompanantes; i++) {
-        const nombreElement = document.getElementById(`acomp${i}`);
-        const armamentoElement = document.getElementById(`acomp${i}-armamento`);
-        const cascoElement = document.getElementById(`acomp${i}-casco`);
-        const chalecoElement = document.getElementById(`chaleco-acomp${i}`);
+    if (desplazamiento === 'MOTORIZADO') {
+        const vehiculoSelect = document.getElementById("vehiculo").value;
+        const manualVehiculo = document.getElementById("manual-vehiculo").value.trim();
+        const km = document.getElementById("km").value;
+        const tarjeta = document.getElementById("tarjeta-combustible").value;
         
-        // Verificar que el elemento de nombre exista antes de intentar acceder a su valor
-        if (nombreElement && nombreElement.value) {
-            const nombre = nombreElement.value;
-            const armamento = armamentoElement ? armamentoElement.value : '';
-            const casco = cascoElement ? cascoElement.value : '';
-            const chaleco = chalecoElement ? chalecoElement.value : '';
-            
-            acompanantes.push({ nombre, armamento, casco, chaleco });
+        let vehiculoCompleto = vehiculoSelect === 'MANUAL' ? manualVehiculo : vehiculoSelect;
+        let vehiculoCodigo = vehiculoCompleto;
+        let vehiculoPatente = '';
+        if (vehiculoCompleto.includes(' - ')) {
+            [vehiculoCodigo, vehiculoPatente] = vehiculoCompleto.split(' - ');
         }
+        
+        mensaje += `*Vehículo:* ${vehiculoCodigo}\n`;
+        if (vehiculoPatente) mensaje += `*Patente:* ${vehiculoPatente}\n`;
+        if (km) mensaje += `*KM:* ${km}\n`;
+        mensaje += `*Tarjeta Combustible:* ${tarjeta}\n`;
     }
-    
-    // Obtener radial y accesorios
-    const radio = document.getElementById("radio").value;
-    const accesoriosSelect = document.getElementById("accesorios").value;
-    const accesorioSeleccionadoValue = document.getElementById("accesorio-select").value;
-    const manualAccesorioValue = document.getElementById('manual-accesorio').value.trim();
-
-    let accesorioFinal = '';
-    let serie = '';
-
-    if (accesorioSeleccionadoValue === 'MANUAL') {
-        accesorioFinal = manualAccesorioValue;
-    } else if (accesorioSeleccionadoValue) {
-        accesorioFinal = accesorioSeleccionadoValue;
-        serie = obtenerSerieDelAccesorio(accesorioSeleccionadoValue);
-    }
-    
-    // Construir mensaje mejorado
-    let mensaje = `*SALIDA OS9*\n\n`;
-    mensaje += `*Fecha:* ${fechaFormateadaWhatsApp}\n`;
-    const vehiculoCompleto = document.getElementById("vehiculo").value;
-    
-    // Manejo seguro del vehículo para evitar undefined
-    let vehiculoCodigo = vehiculoCompleto;
-    let vehiculoPatente = '';
-    
-    if (vehiculoCompleto && vehiculoCompleto.includes(' - ')) {
-        const partes = vehiculoCompleto.split(' - ');
-        vehiculoCodigo = partes[0] || vehiculoCompleto;
-        vehiculoPatente = partes[1] || '';
-    }
-    
-    mensaje += `*Vehículo:* ${vehiculoCodigo}\n`;
-    if (vehiculoPatente) {
-        mensaje += `*Patente:* ${vehiculoPatente}\n`;
-    }
-    
-    if (km) {
-        mensaje += `*Kilometraje:* ${km}\n`;
-    }
-    
-    mensaje += `*Tarjeta de Combustible:* ${tarjetaCombustible}\n`;
     
     mensaje += `\n*Personal:*\n`;
-    mensaje += `*Jefe de Patrulla:* ${jp}`;
-    if (jpArmamento) {
-        mensaje += ` - Armamento: ${jpArmamento}`;
-    }
-    if (jpCasco && equipamiento === 'Sí') {
-        mensaje += ` - Casco: ${jpCasco}`;
-    }
-    if (jpChaleco && equipamiento === 'Sí') {
-        mensaje += ` - Chaleco: ${jpChaleco}`;
+    mensaje += `• *JP:* ${jp}`;
+    if (jpArmamento) mensaje += ` (Arm: ${jpArmamento})`;
+    if (equipamiento === 'Sí') {
+        if (jpCasco) mensaje += ` (Casco: ${jpCasco})`;
+        if (jpChaleco) mensaje += ` (Chaleco: ${jpChaleco})`;
     }
     mensaje += `\n`;
     
-    acompanantes.forEach((acomp, index) => {
-        const numeroAcomp = index + 1;
-        mensaje += `*Acompañante ${numeroAcomp}:* ${acomp.nombre}`;
-        if (acomp.armamento) {
-            mensaje += ` - Armamento: ${acomp.armamento}`;
+    for (let i = 1; i <= contadorAcompanantes; i++) {
+        const acomp = document.getElementById(`acomp${i}`);
+        if (acomp && acomp.value) {
+            const arm = document.getElementById(`acomp${i}-armamento`).value;
+            const casco = document.getElementById(`acomp${i}-casco`).value;
+            const chaleco = document.getElementById(`chaleco-acomp${i}`)?.value;
+            
+            mensaje += `• *Acomp ${i}:* ${acomp.value}`;
+            if (arm) mensaje += ` (Arm: ${arm})`;
+            if (equipamiento === 'Sí') {
+                if (casco) mensaje += ` (Casco: ${casco})`;
+                if (chaleco) mensaje += ` (Chaleco: ${chaleco})`;
+            }
+            mensaje += `\n`;
         }
-        if (acomp.casco && equipamiento === 'Sí') {
-            mensaje += ` - Casco: ${acomp.casco}`;
-        }
-        if (acomp.chaleco && equipamiento === 'Sí') {
-            mensaje += ` - Chaleco: ${acomp.chaleco}`;
-        }
-        mensaje += `\n`;
-    });
-    
-    // Solo incluir equipo radial si tiene valor
-    if (radio) {
-        mensaje += `\n*Equipo Radial:* ${radio}\n`;
     }
     
-    // Solo incluir accesorios si se seleccionó "SI" y hay accesorio
-    if (accesoriosSelect === 'SI' && accesorioSeleccionadoValue) {
-        mensaje += `*Accesorios:* ${accesorioFinal}`;
-        if (serie) {
-            mensaje += ` - Serie: ${serie}`;
+    const radio = document.getElementById("radio").value;
+    const accesoriosSelect = document.getElementById("accesorios").value;
+    if (radio) mensaje += `\n*Radio:* ${radio}\n`;
+    
+    if (accesoriosSelect === 'SI') {
+        const acc = document.getElementById("accesorio-select").value;
+        const manual = document.getElementById('manual-accesorio').value;
+        const accFinal = acc === 'MANUAL' ? manual : acc;
+        if (accFinal) {
+            mensaje += `*Accesorio:* ${accFinal}`;
+            if (acc !== 'MANUAL') {
+                const serie = obtenerSerieDelAccesorio(acc);
+                if (serie) mensaje += ` (Serie: ${serie})`;
+            }
+            mensaje += `\n`;
         }
-        mensaje += `\n`;
     }
     
-    // Solo incluir equipamiento si tiene valor
-    if (equipamiento) {
-        mensaje += `*Equipamiento completo:* ${equipamiento}\n`;
-    }
+    mensaje += `\n*Servicio:* ${tipo}\n`;
+    if (obs) mensaje += `*Obs:* ${obs}\n`;
     
-    mensaje += `*Tipo de Servicio:* ${tipo}\n`;
-    
-    if (obs) {
-        mensaje += `\n*Observaciones:* ${obs}\n`;
-    }
-    
-    mensaje += `\n_Sección OS9 Araucanía 2026_`;
+    mensaje += `\n`;
+    mensaje += `_Sección OS9 Araucanía 2026_`;
 
-    console.log('Mensaje construido:', mensaje);
-    console.log('URL que se abrirá:', `https://wa.me/?text=${encodeURIComponent(mensaje)}`);
-
-    const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
-    console.log('Abriendo WhatsApp...');
-    window.open(url, "_blank");
-    console.log('WhatsApp abierto');
+    window.open(`https://wa.me/?text=${encodeURIComponent(mensaje)}`, "_blank");
 }
 
 // Funciones para manejar tipos de servicio y observaciones
@@ -423,73 +424,44 @@ function guardarObservacion(observacion) {
 function mostrarCamposEquipamiento() {
     const equipamiento = document.getElementById('equipamiento').value;
     const camposEquipamiento = document.getElementById('campos-equipamiento');
-    const equipamientoCompleto = document.getElementById('equipamiento-completo');
     
-    if (equipamiento === 'Sí' || equipamiento === 'No') {
-        camposEquipamiento.style.display = 'block';
-        
-        if (equipamiento === 'Sí') {
-            equipamientoCompleto.style.display = 'block';
-            // Mostrar campos de chaleco para cada funcionario
-            mostrarCamposChalecos();
-        } else {
-            equipamientoCompleto.style.display = 'none';
-            // Limpiar campos de chaleco
-            limpiarCamposChalecos();
-        }
+    if (equipamiento === 'Sí') {
+        camposEquipamiento.classList.remove('hidden');
+        sincronizarChalecos();
     } else {
-        camposEquipamiento.style.display = 'none';
+        camposEquipamiento.classList.add('hidden');
         limpiarCamposChalecos();
     }
 }
 
-function mostrarCamposChalecos() {
-    // Mostrar campos de chaleco para JP y Acomp1
-    document.getElementById('chaleco-jp').parentElement.style.display = 'block';
-    document.getElementById('chaleco-acomp1').parentElement.style.display = 'block';
+/**
+ * Asegura que existan campos de chaleco para todos los acompañantes actuales
+ */
+function sincronizarChalecos() {
+    const containerChalecos = document.getElementById('chalecos-adicionales');
     
-    // Crear campos de chaleco para acompañantes adicionales si no existen
-    const inputsAdicionales = document.querySelectorAll('#acompanantes-adicionales .acompanante-group');
-    inputsAdicionales.forEach((grupo) => {
-        const nombreInput = grupo.querySelector(`input[type="text"]`);
-        if (nombreInput) {
-            const inputId = nombreInput.id; // Ej: acomp2, acomp3, etc.
-            const numero = inputId.replace('acomp', '');
-            const campoChalecoId = `chaleco-${inputId}`;
-            
-            // Verificar si el campo de chaleco ya existe
-            if (!document.getElementById(campoChalecoId)) {
-                agregarCampoChalecoAdicional(numero);
-            } else {
-                // Si existe, solo mostrarlo
-                document.getElementById(campoChalecoId).parentElement.style.display = 'block';
-            }
+    // Buscar todos los inputs de acompañantes (acomp2, acomp3, etc.)
+    // Empezamos desde 2 porque JP y Acomp1 ya tienen sus campos fijos en el HTML
+    for (let i = 2; i <= contadorAcompanantes; i++) {
+        const acompInput = document.getElementById(`acomp${i}`);
+        if (acompInput && !document.getElementById(`chaleco-acomp${i}`)) {
+            agregarCampoChalecoAdicional(i);
         }
-    });
-    
-    // Mostrar campos de chaleco para acompañantes adicionales que ya existen
-    const chalecosPadre = document.getElementById('chalecos-adicionales');
-    const camposChalecos = chalecosPadre.querySelectorAll('.form-group');
-    camposChalecos.forEach(campo => {
-        campo.style.display = 'block';
-    });
+    }
 }
 
 function limpiarCamposChalecos() {
-    // Limpiar y ocultar campos de chaleco
-    document.getElementById('chaleco-jp').value = '';
-    document.getElementById('chaleco-acomp1').value = '';
-    document.getElementById('chaleco-jp').parentElement.style.display = 'none';
-    document.getElementById('chaleco-acomp1').parentElement.style.display = 'none';
+    // Limpiar campos de chaleco fijos
+    const chalecoJP = document.getElementById('chaleco-jp');
+    const chalecoAcomp1 = document.getElementById('chaleco-acomp1');
+    if (chalecoJP) chalecoJP.value = '';
+    if (chalecoAcomp1) chalecoAcomp1.value = '';
     
-    // Limpiar campos de chaleco adicionales
-    const chalecosPadre = document.getElementById('chalecos-adicionales');
-    const camposChalecos = chalecosPadre.querySelectorAll('.form-group');
-    camposChalecos.forEach(campo => {
-        const input = campo.querySelector('input');
-        if (input) input.value = '';
-        campo.style.display = 'none';
-    });
+    // Limpiar y eliminar campos de chaleco adicionales
+    const containerAdicionales = document.getElementById('chalecos-adicionales');
+    if (containerAdicionales) {
+        containerAdicionales.innerHTML = '';
+    }
 }
 
 function agregarCampoChalecoAdicional(numeroAcompanante) {
@@ -509,32 +481,41 @@ function agregarCampoChalecoAdicional(numeroAcompanante) {
 function autocompletarArmamento(inputId) {
     const input = document.getElementById(inputId);
     const datalist = document.getElementById('funcionarios');
+    const infoBadge = document.getElementById(`${inputId}-info`);
     const valorInput = input.value;
     
     // Buscar si el valor coincide con algún funcionario
     const opciones = datalist.querySelectorAll('option');
+    let encontrado = false;
+    
     for (let option of opciones) {
         if (option.value === valorInput) {
             const armamento = option.getAttribute('data-armamento');
             const casco = option.getAttribute('data-casco');
             
             if (armamento) {
-                // Poner el armamento en el campo oculto
                 const armamentoInput = document.getElementById(`${inputId}-armamento`);
-                if (armamentoInput) {
-                    armamentoInput.value = armamento;
-                }
+                if (armamentoInput) armamentoInput.value = armamento;
             }
             
             if (casco) {
-                // Poner el casco en el campo oculto
                 const cascoInput = document.getElementById(`${inputId}-casco`);
-                if (cascoInput) {
-                    cascoInput.value = casco;
-                }
+                if (cascoInput) cascoInput.value = casco;
             }
+
+            // Mostrar info en badge
+            if (infoBadge) {
+                infoBadge.innerHTML = `<span>🔫 ${armamento || 'Sin arma'}</span> <span>🪖 ${casco || 'Sin casco'}</span>`;
+                infoBadge.classList.remove('hidden');
+            }
+            
+            encontrado = true;
             break;
         }
+    }
+
+    if (!encontrado && infoBadge) {
+        infoBadge.classList.add('hidden');
     }
 }
 
@@ -542,24 +523,12 @@ function autocompletarArmamento(inputId) {
 function mostrarCampoSerie() {
     const accesoriosSelect = document.getElementById('accesorios');
     const grupoAccesorios = document.getElementById('grupo-accesorios');
-    const valorSeleccionado = accesoriosSelect.value;
     
-    if (!valorSeleccionado) {
-        // Si no hay accesorio seleccionado, ocultar campos
-        grupoAccesorios.style.display = 'none';
-        return;
-    }
-    
-    // Si se selecciona "NO", ocultar campos de accesorios
-    if (valorSeleccionado === 'NO') {
-        grupoAccesorios.style.display = 'none';
-        return;
-    }
-    
-    // Si se selecciona "SI", mostrar campos de accesorios
-    if (valorSeleccionado === 'SI') {
-        grupoAccesorios.style.display = 'block';
+    if (accesoriosSelect.value === 'SI') {
+        grupoAccesorios.classList.remove('hidden');
         cargarAccesoriosDisponibles();
+    } else {
+        grupoAccesorios.classList.add('hidden');
     }
 }
 
@@ -630,10 +599,9 @@ function mostrarCampoManualAccesorio() {
     const manualAccesorioGroup = document.getElementById('manual-accesorio-group');
 
     if (accesorioSelect.value === 'MANUAL') {
-        manualAccesorioGroup.style.display = 'block';
+        manualAccesorioGroup.classList.remove('hidden');
     } else {
-        manualAccesorioGroup.style.display = 'none';
-        document.getElementById('manual-accesorio').value = ''; // Limpiar campo manual
+        manualAccesorioGroup.classList.add('hidden');
+        document.getElementById('manual-accesorio').value = '';
     }
-
 }
