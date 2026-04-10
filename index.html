@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Salidas</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#004080">
-    
+
     <!-- PWA: Iconos -->
     <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png" />
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    
+
     <!-- PWA: Apple -->
     <link rel="apple-touch-icon" href="images/icon-192.png">
     <meta name="apple-mobile-web-app-title" content="Control de Salidas">
@@ -23,7 +24,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         /* Tema Claro (por defecto) */
         :root {
             --bg-primary: #f8fafc;
@@ -36,7 +37,7 @@
             --input-bg: #f8fafc;
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
-        
+
         /* Tema Oscuro */
         @media (prefers-color-scheme: dark) {
             :root {
@@ -51,7 +52,7 @@
                 --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
             }
         }
-        
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-primary);
@@ -60,7 +61,7 @@
             padding: 20px 10px;
             line-height: 1.5;
         }
-        
+
         .container {
             max-width: 600px;
             margin: 0 auto;
@@ -75,7 +76,7 @@
             text-align: center;
             margin-bottom: 32px;
         }
-        
+
         .logo-img {
             width: 120px;
             height: 120px;
@@ -83,14 +84,14 @@
             border-radius: 20px;
             object-fit: contain;
         }
-        
+
         h1 {
             font-size: 24px;
             font-weight: 800;
             color: var(--text-primary);
             margin-bottom: 4px;
         }
-        
+
         .subtitle {
             color: var(--text-secondary);
             font-size: 16px;
@@ -114,7 +115,7 @@
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 6px;
@@ -122,8 +123,10 @@
             color: var(--text-primary);
             font-size: 14px;
         }
-        
-        input, select, textarea {
+
+        input,
+        select,
+        textarea {
             width: 100%;
             padding: 12px 16px;
             border: 1px solid var(--border-color);
@@ -133,14 +136,16 @@
             color: var(--text-primary);
             transition: all 0.2s ease;
         }
-        
-        input:focus, select:focus, textarea:focus {
+
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 2px var(--accent);
             box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
         }
-        
+
         .btn-whatsapp {
             width: 100%;
             padding: 16px;
@@ -159,7 +164,7 @@
             margin-top: 32px;
             box-shadow: 0 4px 14px 0 rgba(37, 211, 102, 0.39);
         }
-        
+
         .btn-whatsapp:hover {
             background: #128C7E;
             transform: translateY(-1px);
@@ -244,11 +249,13 @@
             position: relative;
         }
 
-        .input-icon-wrapper input, .input-icon-wrapper select {
+        .input-icon-wrapper input,
+        .input-icon-wrapper select {
             padding-left: 44px;
         }
 
-        .input-icon-wrapper i, .input-icon-wrapper .icon-placeholder {
+        .input-icon-wrapper i,
+        .input-icon-wrapper .icon-placeholder {
             position: absolute;
             left: 16px;
             top: 50%;
@@ -268,6 +275,7 @@
             display: inline-flex;
             gap: 4px;
         }
+
         @media (prefers-color-scheme: dark) {
             .badge-info {
                 background: #334155;
@@ -276,6 +284,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -287,14 +296,14 @@
         <form id="salidaForm">
             <!-- SECCIÓN: GENERAL -->
             <div class="section-title">
-                <span>📋</span> Información General
+                Información General
             </div>
-            
+
             <div class="grid-2">
                 <div class="form-group">
                     <label for="fecha">Fecha <span class="required">*</span></label>
                     <div class="input-icon-wrapper">
-                        <span class="icon-placeholder">📅</span>
+
                         <input type="date" id="fecha" required>
                     </div>
                 </div>
@@ -302,8 +311,10 @@
                     <label>Desplazamiento <span class="required">*</span></label>
                     <input type="hidden" id="desplazamiento" value="MOTORIZADO">
                     <div class="toggle-group" id="group-desplazamiento">
-                        <button type="button" class="toggle-btn active" onclick="setToggle('desplazamiento', 'MOTORIZADO')">Vehículo</button>
-                        <button type="button" class="toggle-btn" onclick="setToggle('desplazamiento', 'INFANTERIA')">Infantería</button>
+                        <button type="button" class="toggle-btn active"
+                            onclick="setToggle('desplazamiento', 'MOTORIZADO')">Vehículo</button>
+                        <button type="button" class="toggle-btn"
+                            onclick="setToggle('desplazamiento', 'INFANTERIA')">Infantería</button>
                     </div>
                 </div>
             </div>
@@ -311,12 +322,11 @@
             <!-- SECCIÓN: VEHÍCULO (Solo si es MOTORIZADO) -->
             <div id="section-vehiculo">
                 <div class="section-title">
-                    <span>🚘</span> Vehículo
+                    Vehículo
                 </div>
                 <div class="form-group">
                     <label for="vehiculo">Seleccionar Vehículo <span class="required">*</span></label>
                     <div class="input-icon-wrapper">
-                        <span class="icon-placeholder">🚗</span>
                         <select id="vehiculo" onchange="mostrarCampoManualVehiculo()">
                             <option value="">Seleccionar vehículo...</option>
                         </select>
@@ -325,7 +335,7 @@
                 <div id="manual-vehiculo-group" class="form-group hidden">
                     <label for="manual-vehiculo">Ingresar Vehículo Manual</label>
                     <div class="input-icon-wrapper">
-                        <span class="icon-placeholder">✍️</span>
+
                         <input type="text" id="manual-vehiculo" placeholder="Ej: AP-2167">
                     </div>
                 </div>
@@ -333,7 +343,7 @@
                     <div class="form-group">
                         <label for="km">Kilometraje Actual</label>
                         <div class="input-icon-wrapper">
-                            <span class="icon-placeholder">🔢</span>
+
                             <input type="number" id="km" min="0" placeholder="Ej: 45000">
                         </div>
                     </div>
@@ -341,8 +351,10 @@
                         <label>Tarjeta Combustible</label>
                         <input type="hidden" id="tarjeta-combustible" value="NO">
                         <div class="toggle-group" id="group-tarjeta">
-                            <button type="button" class="toggle-btn active" onclick="setToggle('tarjeta-combustible', 'NO')">✖️ NO</button>
-                            <button type="button" class="toggle-btn" onclick="setToggle('tarjeta-combustible', 'SI')">✔️ SI</button>
+                            <button type="button" class="toggle-btn active"
+                                onclick="setToggle('tarjeta-combustible', 'NO')">✖️ NO</button>
+                            <button type="button" class="toggle-btn" onclick="setToggle('tarjeta-combustible', 'SI')">✔️
+                                SI</button>
                         </div>
                     </div>
                 </div>
@@ -350,46 +362,48 @@
 
             <!-- SECCIÓN: PERSONAL -->
             <div class="section-title">
-                <span>👨</span> Personal de Servicio
+                Personal de Servicio
             </div>
-            
+
             <div class="form-group">
                 <label for="jp">Jefe de Patrulla <span class="required">*</span></label>
                 <div class="input-icon-wrapper">
-                    <span class="icon-placeholder">🕵️</span>
-                    <input type="text" id="jp" list="funcionarios" required placeholder="Grado y Nombre" onchange="autocompletarArmamento('jp')" onfocus="this.select()">
+
+                    <input type="text" id="jp" list="funcionarios" required placeholder="Grado y Nombre"
+                        onchange="autocompletarArmamento('jp')" onfocus="this.select()">
                 </div>
                 <div id="jp-info" class="badge-info hidden"></div>
                 <input type="hidden" id="jp-armamento">
                 <input type="hidden" id="jp-casco">
             </div>
-            
+
             <div class="form-group">
                 <label for="acomp1">Acompañante 1 <span class="required">*</span></label>
                 <div class="input-icon-wrapper">
-                    <span class="icon-placeholder">🕵️</span>
-                    <input type="text" id="acomp1" list="funcionarios" required placeholder="Grado y Nombre" onchange="autocompletarArmamento('acomp1')" onfocus="this.select()">
+
+                    <input type="text" id="acomp1" list="funcionarios" required placeholder="Grado y Nombre"
+                        onchange="autocompletarArmamento('acomp1')" onfocus="this.select()">
                 </div>
                 <div id="acomp1-info" class="badge-info hidden"></div>
                 <input type="hidden" id="acomp1-armamento">
                 <input type="hidden" id="acomp1-casco">
             </div>
-            
+
             <div id="acompanantes-adicionales"></div>
-            
+
             <button type="button" class="btn-secondary" id="btn-agregar-acomp" onclick="agregarAcompanante()">
                 ➕ Añadir Acompañante
             </button>
 
             <!-- SECCIÓN: EQUIPAMIENTO -->
             <div class="section-title">
-                <span>🛡️</span> Equipamiento y Radio
+                Equipamiento y Radio
             </div>
 
             <div class="form-group">
                 <label for="radio">Equipo Radial</label>
                 <div class="input-icon-wrapper">
-                    <span class="icon-placeholder">📻</span>
+
                     <input type="text" id="radio" list="radiales" placeholder="Seleccionar radio...">
                 </div>
             </div>
@@ -399,7 +413,8 @@
                     <label>Accesorios</label>
                     <input type="hidden" id="accesorios" value="NO">
                     <div class="toggle-group" id="group-accesorios">
-                        <button type="button" class="toggle-btn active" onclick="setToggle('accesorios', 'NO')">✖️ NO</button>
+                        <button type="button" class="toggle-btn active" onclick="setToggle('accesorios', 'NO')">✖️
+                            NO</button>
                         <button type="button" class="toggle-btn" onclick="setToggle('accesorios', 'SI')">✔️ SI</button>
                     </div>
                 </div>
@@ -407,8 +422,10 @@
                     <label>Equipamiento Completo</label>
                     <input type="hidden" id="equipamiento" value="No">
                     <div class="toggle-group" id="group-equipamiento">
-                        <button type="button" class="toggle-btn active" onclick="setToggle('equipamiento', 'No')">✖️ NO</button>
-                        <button type="button" class="toggle-btn" onclick="setToggle('equipamiento', 'Sí')">✔️ SI</button>
+                        <button type="button" class="toggle-btn active" onclick="setToggle('equipamiento', 'No')">✖️
+                            NO</button>
+                        <button type="button" class="toggle-btn" onclick="setToggle('equipamiento', 'Sí')">✔️
+                            SI</button>
                     </div>
                 </div>
             </div>
@@ -442,7 +459,7 @@
 
             <!-- SECCIÓN: SERVICIO -->
             <div class="section-title">
-                <span>📝</span> Detalles del Servicio
+                Detalles del Servicio
             </div>
 
             <div class="form-group">
@@ -456,7 +473,7 @@
             </div>
 
             <button type="button" class="btn-whatsapp" onclick="enviarWhatsApp()">
-                <span>📲</span> ENVIAR POR WHATSAPP
+                ENVIAR POR WHATSAPP
             </button>
         </form>
     </div>
@@ -475,4 +492,5 @@
         document.getElementById('fecha').value = `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, '0')}-${String(f.getDate()).padStart(2, '0')}`;
     </script>
 </body>
+
 </html>
